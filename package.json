@@ -1,0 +1,48 @@
+{
+  "name": "grunt-bower-update",
+  "description": "Update versions of bower.json dependencies",
+  "version": "0.1.0",
+  "homepage": "https://github.com/zetorama/grunt-bower-update",
+  "author": {
+    "name": "Pavel Zet",
+    "url": "https://github.com/zetorama"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zetorama/grunt-bower-update.git"
+  },
+  "bugs": {
+    "url": "https://github.com/zetorama/grunt-bower-update/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/zetorama/grunt-bower-update/blob/master/LICENSE"
+    }
+  ],
+  "engines": {
+    "node": ">= 0.10.0"
+  },
+  "scripts": {},
+  "dependencies": {
+    "bluebird": "^2.9.24",
+    "bower": "^1.4.1",
+    "bower-endpoint-parser": "^0.2.2",
+    "bower-json": "^0.4.0",
+    "bower-logger": "^0.2.2",
+    "inquirer": "^0.8.2",
+    "q": "^1.2.0",
+    "semver": "^4.3.3"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.0"
+  },
+  "keywords": [
+    "gruntplugin",
+    "bower"
+  ],
+  "files": [
+    "LICENSE",
+    "tasks"
+  ]
+}
