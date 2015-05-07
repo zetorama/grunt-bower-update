@@ -12,6 +12,7 @@ var bowerJson = require('bower-json');
 module.exports = function(grunt) {
 
   grunt.registerTask('bower-update', 'Update bower.json versions', function () {
+    var done = this.async();
     var options = this.options({
       cwd: process.cwd(),
       devDependencies: true,
@@ -19,10 +20,15 @@ module.exports = function(grunt) {
       pickAll: false,
       forceLatest: false,
       rangeChar: '',
+      logBowerInfo: 'warn',
       filter: void 0,
       choose: void 0
     });
-    var done = this.async();
+    var log = function log(msg) {
+      var logger = defineLogger(options.logBowerInfo, msg);
+      var name = msg.data.endpoint.name || msg.data.pkgMeta.name || msg.data.endpoint.source;
+      logger('%s: bower %s [%s] - %s', name.yellow, msg.level, msg.id, msg.message.grey);
+    };
 
     if (grunt.option('force-latest')) {
       options.forceLatest = grunt.option('force-latest');
@@ -33,6 +39,11 @@ module.exports = function(grunt) {
     if (grunt.option('range-char')) {
       options.rangeChar = grunt.option('range-char');
     }
+    if (grunt.option('log-bower-info')) {
+      options.logBowerInfo = grunt.option('log-bower-info');
+    }
+
+    logger.addListener('log', log);
 
     readJSON(options)
       .then(prepareDeps.bind(null, options))
@@ -40,9 +51,12 @@ module.exports = function(grunt) {
       .then(chooseVersions.bind(null, options))
       .then(saveJSON.bind(null, options))
       .then(done)
-      .catch(function (err) {
+      .catch(function fail(err) {
         grunt.verbose.error('\n', err);
         grunt.fail.warn(err.message);
+      })
+      .finally(function always() {
+        logger.removeListener('log', log);
       });
   });
 
@@ -173,6 +187,7 @@ module.exports = function(grunt) {
       grunt.verbose.writeln('Forced latest versions for every package.');
       return Promise.resolve(updated.map(function (pkg) {
         pkg.value = (options.rangeChar || pkg.rangeChar) + pkg.latest.version;
+        grunt.log.writeln('For %s version %s has been chosen.', pkg.name.yellow, pkg.value.yellow);
         return pkg;
       }));
     }
@@ -260,6 +275,26 @@ module.exports = function(grunt) {
     grunt.log.ok('Successfully updated versions of %s bower dependencies.', num);
 
     return json;
+  }
+
+  function defineLogger(criteria, msg) {
+    var level = BowerLogger.LEVELS[msg.level];
+    // use #error() if produced either warn, conflict or error
+    var method = level >= 3 ? 'error' : 'writeln';
+    var dest;
+    if (typeof criteria === 'boolean') {
+      dest = criteria ? 'log' : 'verbose';
+    } else if (typeof criteria === 'function') {
+      dest = criteria(msg) ? 'log' : 'verbose';
+    } else {
+      if (typeof criteria === 'string' && criteria in BowerLogger.LEVELS) {
+        criteria = BowerLogger.LEVELS[criteria];
+      }
+
+      dest = (Number(criteria) || 0) <= level ? 'log' : 'verbose';
+    }
+
+    return grunt[dest][method].bind(grunt[dest]);
   }
 
 };
