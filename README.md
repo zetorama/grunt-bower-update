@@ -130,7 +130,7 @@ grunt.initConfig({
 
 ## Release History
 
- * 2015-04-15 **v0.1.1**
+ * 2015-05-07 **v0.1.1**
    - Improved logging output.
  * 2015-04-15 **v0.1.0**
    - Initial release.
