@@ -1,4 +1,4 @@
-# grunt-bower-update v0.1.0
+# grunt-bower-update v0.1.2
 > Update versions of `bower.json` dependencies interactively (or not)
 
 ## Getting Started
@@ -130,6 +130,8 @@ grunt.initConfig({
 
 ## Release History
 
+ * 2015-05-07 **v0.1.2**
+   - Cosmetic update.
  * 2015-05-07 **v0.1.1**
    - Improved logging output.
  * 2015-04-15 **v0.1.0**

@@ -1,7 +1,7 @@
 {
   "name": "grunt-bower-update",
   "description": "Update versions of bower.json dependencies",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "homepage": "https://github.com/zetorama/grunt-bower-update",
   "author": {
     "name": "Pavel Zet",
